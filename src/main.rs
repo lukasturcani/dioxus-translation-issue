@@ -11,7 +11,7 @@ use unic_langid_impl::LanguageIdentifier;
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     #[cfg(feature = "prebuild")]
     {
-        let language = "sk".parse::<LanguageIdentifier>().unwrap();
+        let language = "en".parse::<LanguageIdentifier>().unwrap();
         let mut vdom = VirtualDom::new_with_props(App, AppProps { language });
         vdom.rebuild_in_place();
         let content = fs::read_to_string("./dist/index.html")?
@@ -27,7 +27,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .launch(|| {
                 let language = "sk".parse::<LanguageIdentifier>().unwrap();
                 rsx! {
-                    App{ language }
+                    App { language }
                 }
             });
     }
