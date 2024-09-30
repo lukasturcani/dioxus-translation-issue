@@ -11,7 +11,8 @@ use unic_langid_impl::LanguageIdentifier;
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     #[cfg(feature = "prebuild")]
     {
-        let mut vdom = VirtualDom::new(App);
+        let language = "sk".parse::<LanguageIdentifier>().unwrap();
+        let mut vdom = VirtualDom::new_with_props(App, AppProps { language });
         vdom.rebuild_in_place();
         let content = fs::read_to_string("./dist/index.html")?
             .replace("<!-- REPLACE ME -->", &dioxus::ssr::pre_render(&vdom));
@@ -24,8 +25,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         LaunchBuilder::web()
             .with_cfg(Config::new().hydrate(true))
             .launch(|| {
+                let language = "sk".parse::<LanguageIdentifier>().unwrap();
                 rsx! {
-                    App{}
+                    App{ language }
                 }
             });
     }
@@ -33,9 +35,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 #[component]
-fn App() -> Element {
-    let en = "en".parse::<LanguageIdentifier>().unwrap();
-    use_init_i18n(en.clone(), en, || {
+fn App(language: LanguageIdentifier) -> Element {
+    use_init_i18n(language.clone(), language, || {
         vec![
             json!({"id": "en", "texts": {"title": "Hello"}}),
             json!({"id": "sk", "texts": {"title": "Ahoj"}}),
