@@ -46,6 +46,7 @@ fn App(language: LanguageIdentifier) -> Element {
         .collect()
     });
     let mut i18 = use_i18();
+    dioxus_logger::tracing::info!("{:?}", i18.translate("title"));
     rsx! {
         h1 {
             {i18.translate("title")}
